@@ -3,7 +3,9 @@ var isoAbund = require('isotope-abundances');
 module.exports = class MolecularFormula {
   constructor(mf) {
     this.formula = mf;
-    this.composition = this.createComposition();
+    var expanded = this.cleanParantheses(this.formula);
+    this.composition = this.formulaToJson(expanded);
+    this.simplifiedFormula = this.createSimplifiedFormula();
   }
 
   getFormula() {
@@ -14,16 +16,41 @@ module.exports = class MolecularFormula {
     return this.composition;
   }
 
-  createComposition() {
-    return this.formulaToJson();
+  getSimplifiedFormula() {
+    return this.simplifiedFormula;
   }
 
-  formulaToJson() {
-    var l = this.formula.split("");
+  createSimplifiedFormula() {
+    var formula = "";
+    for(var key in this.composition) {
+      if(this.composition.hasOwnProperty(key)) {
+        formula += key;
+        if(this.composition[key] !== 1) { formula += this.composition[key]; }
+      }
+    }
+    return formula;
+  }
+
+  createComposition(elemList) {
+    var json = {}
+    for(var i=0; i<elemList.length; i++) {
+      var atom = elemList[i][0];
+      var count = parseInt(elemList[i][1]);
+      if(!(atom in json)) {
+        json[atom] = count;
+      }
+      else {
+        json[atom] += count;
+      }
+    }
+    return json;
+  }
+
+  createElemList(formula) {
+    var l = formula.split("");
     var currentElem = "";
     var currentCount = "";
     var elemList = [];
-    var json = {};
 
     for(var i=0; i<l.length; i++) {
       if(currentElem.length > 0 && this.isUpperCase(l[i])) {
@@ -47,18 +74,59 @@ module.exports = class MolecularFormula {
     }
     if(currentCount.length === 0) { currentCount = "1"; }
     elemList.push([currentElem, currentCount]);
+    return elemList;    
+  }
 
-    for(var i=0; i<elemList.length; i++) {
-      var atom = elemList[i][0];
-      var count = parseInt(elemList[i][1]);
-      if(!(atom in json)) {
-        json[atom] = count;
+  getParanthesisGroups(formula) {
+    var openIndex = [];
+    var groups = [];
+
+    for(var i=0; i<formula.length; i++) {
+      var c = formula[i];
+      if(c === "(") {
+        openIndex.push(i);
       }
-      else {
-        json[atom] += count;
+      if(c === ")") {
+        groups.push([openIndex.pop(), i]);
       }
     }
-    return json;
+    return groups;
+  }
+
+  cleanParantheses(formula) {
+    if(!formula.includes("(")) { return formula; }
+    else {
+      var innerGroup = this.getParanthesisGroups(formula)[0];
+      var startIndex = innerGroup[0];
+      var stopIndex = innerGroup[1]
+
+      var c = "";
+      var i = 1;
+      while(this.isNumber(formula[stopIndex+i])) {
+        c += formula[stopIndex+i];
+        i++;
+      }
+      if(c.length === 0) { c = "1"; }
+      var multiplier = parseInt(c);
+      var partial = formula.substring(startIndex+1, stopIndex);
+
+      var elemList = this.createElemList(partial);
+      var newPartial = "";
+      for(var i=0; i<elemList.length; i++) {
+        newPartial += elemList[i][0];
+        newPartial += elemList[i][1] * multiplier;
+      }
+
+      var replacePart = "(" + partial + ")";
+      if(multiplier !== 1) { replacePart += multiplier; }
+      var newFormula = formula.replace(replacePart, newPartial);
+      return this.cleanParantheses(newFormula);
+    }
+  }
+
+  formulaToJson(formula) {
+    var elemList = this.createElemList(formula);
+    return this.createComposition(elemList);
   }
 
   isLowerCase(c) {
