@@ -125,6 +125,7 @@ module.exports = class MolecularFormula {
   }
 
   formulaToJson(formula) {
+    if(formula.length === 0) { return {}; }
     var elemList = this.createElemList(formula);
     return this.createComposition(elemList);
   }
