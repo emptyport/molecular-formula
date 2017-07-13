@@ -45,7 +45,7 @@ This can be useful in cases where perhaps you have a carbon chain where all the 
 ## Tests
 You can run `npm test` to run the tests after installing the development dependencies.
 
-## Future funcionality
+## Future functionality
 Molecular weights will be added next to this module along with the ability to add/subtract atoms to and from an existing formula.
 
 ## License
