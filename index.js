@@ -8,6 +8,14 @@ module.exports = class MolecularFormula {
     this.simplifiedFormula = this.createSimplifiedFormula();
   }
 
+  getMass() {
+    var mass = 0.0;
+    for(var key in this.composition) {
+      mass += (isoAbund(key)['Mass'] * this.composition[key])
+    }
+    return mass;
+  }
+
   getFormula() {
     return this.formula;
   }
@@ -18,6 +26,59 @@ module.exports = class MolecularFormula {
 
   getSimplifiedFormula() {
     return this.simplifiedFormula;
+  }
+
+  addComposition(composition) {
+    for(var key in composition) {
+      if(!(key in this.composition)) {
+        this.composition[key] = composition[key];
+      }
+      else {
+        this.composition[key] += composition[key];
+      }
+    }
+  }
+
+  subtractComposition(composition) {
+    for(var key in composition) {
+      if(!(key in this.composition)) {
+        continue;
+      }
+      else {
+        this.composition[key] -= composition[key];
+        if(this.composition[key] <= 0) {
+          delete this.composition[key];
+        }
+      }
+    }
+  }
+
+  add(new_formula) {
+    var composition = {};
+    if (typeof(new_formula) === 'string') {
+      var expanded = this.cleanParantheses(new_formula);
+      composition = this.formulaToJson(expanded);
+    }
+    else {
+      composition = new_formula;
+    }
+    this.addComposition(composition);
+    this.simplifiedFormula = this.createSimplifiedFormula();
+    this.formula = this.simplifiedFormula;
+  }
+
+  subtract(new_formula) {
+    var composition = {};
+    if (typeof(new_formula) === 'string') {
+      var expanded = this.cleanParantheses(new_formula);
+      composition = this.formulaToJson(expanded);
+    }
+    else {
+      composition = new_formula;
+    }
+    this.subtractComposition(composition);
+    this.simplifiedFormula = this.createSimplifiedFormula();
+    this.formula = this.simplifiedFormula;
   }
 
   createSimplifiedFormula() {

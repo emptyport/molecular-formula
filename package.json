@@ -1,7 +1,7 @@
 {
   "name": "molecular-formula",
-  "version": "1.0.1",
-  "description": "A JavaScript library for working with molecular-formula",
+  "version": "1.1.0",
+  "description": "A library for working with molecular-formula",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha"

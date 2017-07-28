@@ -53,3 +53,44 @@ describe('Complex Formula', function() {
     formula.getComposition().should.deep.equal({ Na: 4, O: 2, H: 6, C: 2, Cl: 4, U: 1, N: 1});
   });
 });
+
+describe('Adding and Subtracting Formulae', function() {
+  methyl = new molFormula('CH3');
+
+  it('can add string', function() {
+    methyl.add('(CH3)2');
+    methyl.getSimplifiedFormula().should.equal('C3H9');
+    methyl.getFormula().should.equal('C3H9');
+  });
+
+  it('can add json', function() {
+    methyl.add({'C': 1, 'Na': 2});
+    methyl.getSimplifiedFormula().should.equal('C4H9Na2');
+    methyl.getFormula().should.equal('C4H9Na2');
+  });
+
+  it('can subtract string', function() {
+    methyl.subtract('(NaCl)2');
+    methyl.getSimplifiedFormula().should.equal('C4H9');
+    methyl.getFormula().should.equal('C4H9');
+  });
+
+  it('can subtract json', function() {
+    methyl.subtract({'C': 3, 'H': 6});
+    methyl.getSimplifiedFormula().should.equal('CH3');
+    methyl.getFormula().should.equal('CH3');
+  });
+});
+
+describe('Molecular Masses', function() {
+  water = new molFormula('H2O');
+  decane = new molFormula('CH3(CH2)8CH3');
+  
+  it('water mass is correct', function() {
+    water.getMass().should.equal(18.01528);
+  });
+
+  it('decane mass is correct', function() {
+    decane.getMass().should.equal(142.28208);
+  });
+});
