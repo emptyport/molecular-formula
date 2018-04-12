@@ -82,6 +82,14 @@ describe('Adding and Subtracting Formulae', function() {
   });
 });
 
+describe('Multiple digits after parantheses', function() {
+  carbon_chain = new molFormula('(CH2)10');
+
+  it('parses correctly', function() {
+    carbon_chain.getSimplifiedFormula().should.equal('C10H20');
+  });
+});
+
 describe('Molecular Masses', function() {
   water = new molFormula('H2O');
   decane = new molFormula('CH3(CH2)8CH3');
