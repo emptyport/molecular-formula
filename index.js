@@ -2,7 +2,10 @@ var isoAbund = require('isotope-abundances');
 
 module.exports = class MolecularFormula {
   constructor(mf) {
-    this.formula = mf;
+    this.formula = mf.replace(
+      /[⁰¹²³⁴-⁹₀-₉]/g,
+      char => char.charCodeAt(0).toString(16).slice(-1)
+    );
     var expanded = this.cleanParantheses(this.formula);
     this.composition = this.formulaToJson(expanded);
     this.simplifiedFormula = this.createSimplifiedFormula();
