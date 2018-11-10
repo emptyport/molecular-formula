@@ -1,4 +1,11 @@
 # molecular-formula
+
+[![Build Status](https://travis-ci.org/emptyport/molecular-formula.svg?branch=master)](https://travis-ci.org/emptyport/molecular-formula)
+[![codecov](https://codecov.io/gh/emptyport/molecular-formula/branch/master/graph/badge.svg)](https://codecov.io/gh/emptyport/molecular-formula)
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 A simple library to work with molecular formula.
 
 View on npm [here](https://www.npmjs.com/package/molecular-formula).
@@ -14,14 +21,22 @@ To use this module, import it and then create a new molecular formula.
 var molFormula = require('molecular-formula');
 var water = new molFormula('H2O');
 ```
+
+Subscripts are also now supported thanks to [AprilArcus](https://github.com/AprilArcus)!
+``` javascript
+var water = new molFormula('H₂O');
+```
+
 You can retrieve the original formula like so.
 ``` javascript
 var original_formula = water.getFormula();
 ```
+
 You also have access to the elemental composition.
 ``` javascript
 var composition = water.getComposition();
 ```
+
 Output:
 ```
 {
@@ -69,6 +84,11 @@ water.getMass();
 
 ## Tests
 You can run `npm test` to run the tests after installing the development dependencies.
+
+## Contributors
+[<img src="https://avatars1.githubusercontent.com/u/2045543?s=400&v=4" width="75px;"/><br /><sub><b>April Arcus</b></sub>](https://github.com/AprilArcus)<br />
+[💻](https://github.com/emptyport/molecular-formula/commits?author=AprilArcus "Code")
+[⚠️](https://github.com/emptyport/molecular-formula/commits?author=AprilArcus "Tests")
 
 ## Future functionality
 There are currently no planned improvements to this module. I am open to suggestions so let me know if you think something is missing.
