@@ -54,6 +54,31 @@ describe('Complex Formula', function() {
   });
 });
 
+describe('Unicode Subscripts', function() {
+  formula = new molFormula('Na₂(OH)₂CH₄(Na(Cl)₂)₂U(CN)');
+
+  it('formula for Na₂(OH)₂CH₄(Na(Cl)₂)₂U(CN) matches', function() {
+    formula.getFormula().should.equal('Na2(OH)2CH4(Na(Cl)2)2U(CN)');
+  });
+
+  it('simplified formula for Na₂(OH)₂CH₄(Na(Cl)₂)₂U(CN) matches', function() {
+    formula.getSimplifiedFormula().should.equal('Na4O2H6C2Cl4UN');
+  });
+
+  it('composition for Na₂(OH)₂CH₄(Na(Cl)₂)₂U(CN) matches', function() {
+    var composition = formula.getComposition();
+    Object.keys(composition).length.should.equal(7);
+    composition['Na'].should.equal(4);
+    composition['O'].should.equal(2);
+    composition['H'].should.equal(6);
+    composition['C'].should.equal(2);
+    composition['Cl'].should.equal(4);
+    composition['U'].should.equal(1);
+    composition['N'].should.equal(1);
+    formula.getComposition().should.deep.equal({ Na: 4, O: 2, H: 6, C: 2, Cl: 4, U: 1, N: 1});
+  });
+});
+
 describe('Adding and Subtracting Formulae', function() {
   methyl = new molFormula('CH3');
 
