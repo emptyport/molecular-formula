@@ -32,15 +32,15 @@ describe('Simple Formula', function() {
 describe('Complex Formula', function() {
   formula = new molFormula('Na2(OH)2CH4(Na(Cl)2)2U(CN)');
 
-  it('formula for H2O matches', function() {
+  it('formula for Na2(OH)2CH4(Na(Cl)2)2U(CN) matches', function() {
     formula.getFormula().should.equal('Na2(OH)2CH4(Na(Cl)2)2U(CN)');
   });
 
-  it('simplified formula for H2O matches', function() {
+  it('simplified formula for Na2(OH)2CH4(Na(Cl)2)2U(CN) matches', function() {
     formula.getSimplifiedFormula().should.equal('Na4O2H6C2Cl4UN');
   });
 
-  it('composition for H2O matches', function() {
+  it('composition for Na2(OH)2CH4(Na(Cl)2)2U(CN) matches', function() {
     var composition = formula.getComposition();
     Object.keys(composition).length.should.equal(7);
     composition['Na'].should.equal(4);
